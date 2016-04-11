@@ -306,7 +306,7 @@ void BigNum::print()    //输出大数
 }
 
 const int N = 32, J = 500;
-const int MAXD = 10;
+const int MAXD = 7;
 char s[N];
 
 int solve(BigNum x) {
