@@ -22,7 +22,7 @@ set hlsearch "搜索高亮
 set guioptions-=T "一出工具栏
 set showcmd "显示出输入的命令
 set guifont=Menlo:h18 "字体和大小
-set lines=45
+set lines=50
 set columns=100
 set scrolloff=3 "光标移动到上下两端,保持3行距离
 set history=1000 "历史记录条数从20到1000
@@ -68,7 +68,7 @@ let l = l + 1 | call setline(l,'#define rep(i, a, n) for (int i = a; i < n; i++)
 let l = l + 1 | call setline(l,'#define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++) ')
 let l = l + 1 | call setline(l,'#define pr(x) cout << #x << " " << x << " "')
 let l = l + 1 | call setline(l,'#define prln(x) cout << #x << " " << x << endl')
-let l = l + 1 | call setline(l,'const int mod = int(1e9) + 7, INF = 0x3fffffff, maxn = 1e5 + 12;')
+let l = l + 1 | call setline(l,'const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e5 + 12;')
 let l = l + 1 | call setline(l,'')
 let l = l + 1 | call setline(l,'')
 let l = l + 1 | call setline(l,'')
@@ -91,7 +91,7 @@ func! CompileRunGcc()
            exec "!g++ -Wall -DLOCAL % -o  %<"
            exec "!time ./%<"
         elseif &filetype == 'cpp'
-           exec "!g++ -WALL -DLOCAL % -o  %<"
+           exec "!g++ -Wall -DLOCAL % -o  %<"
            exec "!time ./%<"
         elseif &filetype == 'java'
            exec "!javac %"
