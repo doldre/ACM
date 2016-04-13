@@ -1,4 +1,4 @@
-//POJ 1061 青蛙的约会
+
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -21,7 +21,7 @@ ll ex_gcd(ll a, ll b, ll &x, ll &y) {
     return res;
 }
 
-/* ax = c mod b */
+//ax = c mod (b)
 ll solve(ll a, ll b, ll c) {
     ll x, y;
     ll g =  ex_gcd(a, b, x, y);
@@ -32,11 +32,18 @@ ll solve(ll a, ll b, ll c) {
     x = (x % b + b) % b;
     return x;
 }
+
 int main() {
-    ll x, y, m, n, L;
-    cin >> x >> y >> m >> n >> L;
-    ll ans = solve(m - n, L, y - x);
-    if(ans == -1) cout << "Impossible" << endl;
-    else cout << ans << endl;
+    ll A, B, C, k;
+    while(cin >> A >> B >> C >> k) {
+        if(A == 0 && B == 0 && C == 0 && k == 0) break;
+        ll D = (1ll<<k);
+        ll x = solve(C, D, B - A);
+        if(x == -1) {
+            printf("FOREVER\n");
+        } else {
+            cout << x << endl;
+        }
+    }
     return 0;
 }
