@@ -67,6 +67,7 @@ void solve() {
 		for (int dir = 0; dir < 4; dir++) {
 			int nx = x + dx[dir], ny = y + dy[dir];
 			if(nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+			//if(H[nx][ny] < inf) continue;
 			if(H[nx][ny] <= max(h, A[nx][ny])) continue;
 			H[nx][ny] = max(h, A[nx][ny]);
 			que.push(Node(H[nx][ny], nx, ny));

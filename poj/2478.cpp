@@ -1,0 +1,60 @@
+/************************************************
+ *Author        :mathon
+ *Created Time  :2016年04月14日 星期四 14时02分47秒
+*************************************************/
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <stack>
+using namespace std;
+typedef pair<int, int> pii;
+typedef long long ll;
+typedef unsigned long long ull;
+vector<int> vi;
+#define xx first
+#define yy second
+#define sa(n) scanf("%d", &(n))
+#define rep(i, a, n) for (int i = a; i < n; i++)
+#define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++) 
+#define pr(x) cout << #x << " " << x << " "
+#define prln(x) cout << #x << " " << x << endl
+const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e6 + 5;
+
+int euler_phi[maxn];
+void init() {
+	for (int i = 0; i < maxn; i++) euler_phi[i] = i;
+	for (int i = 2; i < maxn; i++) {
+		if(euler_phi[i] == i) {
+			for (int j = i; j < maxn; j += i) {
+				euler_phi[j] = euler_phi[j] / i * (i - 1);
+			}
+		}
+	}
+}
+ll ans[maxn];
+int main(void)
+{
+#ifdef LOCAL
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+#endif
+	init();    
+	ans[1] = 0;
+	for (int i = 2; i < maxn; i++) {
+		ans[i] = ans[i-1] + euler_phi[i];
+	}
+	int x;
+	while(cin >> x && x != 0) {
+		cout << ans[x] << endl;
+	}
+    return 0;
+}
