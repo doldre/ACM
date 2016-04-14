@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+int mp[1111][1111];
+vector<pair<int, pair<int, int> > >V;
+int fa[1111111];
+int full[1111111];
+int vis[1111][1111];
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
+int n, m;
+int find(int pos)
+{
+    return fa[pos] == pos ? pos : fa[pos] = find(fa[pos]);
+}
+void combine(int x, int y)
+{
+	printf("debug: %d %d\n", x, y);
+    for(int i = 0; i < 4; i++)
+    {
+        int xx = x + dx[i];
+        int yy = y + dy[i];
+        if(xx < 0 || yy < 0 || xx > n - 1 || yy > m - 1)
+        {
+            full[x * m + y] = 1;
+            continue;
+        }
+        int f = find(xx * m + yy);
+        if(vis[xx][yy] == 0)
+            continue;
+        if(full[f])
+        {
+            full[x * m + y] = 1;
+        }
+        else
+        {
+//            printf("%d %d %d %d\n", xx, yy, x, y);
+            fa[f] = x * m + y;
+        }
+    }
+}
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for(int i = 0; i < n; i++)
+        for(int j = 0; j < m; j++)
+        {
+            scanf("%d", &mp[i][j]);
+            V.push_back(make_pair(mp[i][j], make_pair(i, j)));
+            fa[i * m + j] = i * m + j;
+            full[i * m + j] = 0;
+        }
+    sort(V.begin(), V.end());
+    int len = n * m;
+    for(int i = 0; i < len; i++)
+    {
+        vis[V[i].second.first][V[i].second.second] = 1;
+        combine(V[i].second.first, V[i].second.second);
+    }
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < m; j++)
+        {
+            int p = find(i * m + j);
+            int px = p / m;
+            int py = p % m;
+            printf("%d%c", - mp[i][j] + mp[px][py], j == m - 1 ? '\n' : ' ');
+        }
+    }
+}
