@@ -1,6 +1,6 @@
 /************************************************
  *Author        :mathon
- *Created Time  :六  4/16 09:06:15 2016
+ *Created Time  :五  4/15 21:41:11 2016
  *Problem class:
 *************************************************/
 
@@ -29,35 +29,39 @@ vector<int> vi;
 #define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++)
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e5 + 12;
+int n, k, mod;
 
-
+ll fast_pow(ll x, int n) {
+    ll res = 1;
+    while(n) {
+        if(n & 1) {
+            res = (res * x) % mod;
+        }
+        x = (x * x) % mod;
+        n >>= 1;
+    }
+    return res;
+}
 
 int main(void)
 {
 #ifdef LOCAL
-    freopen("A-large.in", "r", stdin);
-    freopen("A-large.out", "w", stdout);
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
 #endif
     int T;
-    scanf("%d", &T);
+    cin >> T;
     for (int Cas = 1; Cas <= T; Cas++) {
-        string str;
-        deque<char> ans;
-        cin >> str;
-        ans.push_back(str[0]);
-        for (int i = 1; i < (int)str.size(); i++) {
-            char c = str[i];
-            if(c >= ans.front()) {
-                ans.push_front(c);
-            } else ans.push_back(c);
+        cin >> n >> k >> mod;
+        ll res = 0;
+        for (int i = 0; i < n; i++) {
+            int x;
+            cin >> x;
+            res = (res + x) % mod;
         }
-        printf("Case #%d: ", Cas);
-        while(!ans.empty()) {
-            printf("%c", ans.front());
-            ans.pop_front();
-        }
-        printf("\n");
+        res = (res * fast_pow(n, k - 1) % mod ) * k % mod;
+        printf("Case %d: ", Cas);
+        cout << res << endl;
     }
     return 0;
 }

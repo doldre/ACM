@@ -1,6 +1,6 @@
 /************************************************
  *Author        :mathon
- *Created Time  :六  4/16 09:06:15 2016
+ *Created Time  :六  4/16 07:20:23 2016
  *Problem class:
 *************************************************/
 
@@ -29,35 +29,35 @@ vector<int> vi;
 #define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++)
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e5 + 12;
+const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e6 + 5;
 
-
-
+double ans[maxn];
+const double det = 0.577215666490975;
+void init() {
+    for (int i = 1; i < maxn; i++) {
+        ans[i] = ans[i - 1] + 1.0 / i;
+    }
+//    printf("%.15f\n", ans[maxn-1] - log(maxn));
+    //printf("%.9f %.9f\n", ans[maxn-1], log(maxn));
+}
 int main(void)
 {
 #ifdef LOCAL
-    freopen("A-large.in", "r", stdin);
-    freopen("A-large.out", "w", stdout);
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
 #endif
+    init();
     int T;
-    scanf("%d", &T);
+    cin >> T;
     for (int Cas = 1; Cas <= T; Cas++) {
-        string str;
-        deque<char> ans;
-        cin >> str;
-        ans.push_back(str[0]);
-        for (int i = 1; i < (int)str.size(); i++) {
-            char c = str[i];
-            if(c >= ans.front()) {
-                ans.push_front(c);
-            } else ans.push_back(c);
+        int x;
+        scanf("%d", &x);
+        printf("Case %d: ", Cas);
+        if(x < maxn) {
+            printf("%.10f\n", ans[x]);
+        } else {
+            printf("%.10f\n", log(x + 0.5) + det);
         }
-        printf("Case #%d: ", Cas);
-        while(!ans.empty()) {
-            printf("%c", ans.front());
-            ans.pop_front();
-        }
-        printf("\n");
     }
     return 0;
 }
