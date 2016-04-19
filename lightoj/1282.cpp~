@@ -67,7 +67,7 @@ int main(void)
 #endif
     int n;
     cin >> n;
-    char str[100];
+    char str[10];
     for (int Cas = 1; Cas <= n; Cas++) {
         ll n, k;
         cin >> n >> k;
