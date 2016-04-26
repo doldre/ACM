@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cstdio>
+#include <iostream>
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
@@ -42,12 +42,12 @@ void da(int *r, int *sa, int n, int m) {
     }
     return;
 }
-int rank[maxn], height[maxn];
+int _rank[maxn], height[maxn];
 void callheight(int *r, int *sa, int n) {
     int i,j,k=0;
-    for(i=1;i<=n;i++) rank[sa[i]]=i;
-    for(i=0;i<n;height[rank[i++]]=k)
-    for(k?k--:0,j=sa[rank[i]-1];r[i+k]==r[j+k];k++);
+    for(i=1;i<=n;i++) _rank[sa[i]]=i;
+    for(i=0;i<n;height[_rank[i++]]=k)
+    for(k?k--:0,j=sa[_rank[i]-1];r[i+k]==r[j+k];k++);
     return;
 }
 
@@ -59,7 +59,7 @@ void solve() {
     while(cases--) {
         rst(r, 0);
         rst(sa, 0);
-        rst(rank, 0);
+        rst(_rank, 0);
         rst(height, 0);
         char str[maxn] = "";
         scanf("%s", str);
