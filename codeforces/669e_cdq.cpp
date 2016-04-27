@@ -25,7 +25,7 @@ vector<int> vi;
 #define lowbit(x) (x&-x)
 #define sa(n) scanf("%d", &(n))
 #define rep(i, a, n) for (int i = a; i < n; i++)
-#define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++) 
+#define vep(c) for(decltype((c).begin() ) it = (c).begin(); it != (c).end(); it++)
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
 const int mod = int(1e9) + 7, INF = 0x3f3f3f3f, maxn = 1e5 + 12;
@@ -39,7 +39,7 @@ struct Bit {
         tim = 0;
         memset(cnt, 0, sizeof(cnt));
     }
-    
+
     void newOne() {
         ++tim;
     }
@@ -54,7 +54,7 @@ struct Bit {
 
     int sum(int i) {
         if(cnt[i] == tim) {
-            return cnt[i];
+            return bit[i];
         }
         return 0;
     }
@@ -85,18 +85,18 @@ void cdq(int l, int r) {
             }
         }
         ans[buf[i].id] += bit.sum(buf[i].x);
-        pr(bit.sum(buf[i].x));
-        pr(buf[i].x);
-        pr(buf[i].id);
-        prln(ans[buf[i].id]);
+        /* pr(bit.sum(buf[i].x)); */
+        /* pr(buf[i].x); */
+        /* pr(buf[i].id); */
+        /* prln(ans[buf[i].id]); */
     }
     cdq(m + 1, r);
 }
-    
+
 int main(void)
 {
 #ifdef LOCAL
-    //freopen("in.txt", "r", stdin);
+    freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
     int n;
