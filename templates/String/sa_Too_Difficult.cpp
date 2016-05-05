@@ -53,6 +53,7 @@ void height() {
 		ht[rk[i]]=k;
 	}
 }
+
 int main() {
 	scanf("%d",&n);
 	scanf("%s",s);
