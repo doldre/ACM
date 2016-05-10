@@ -9,8 +9,5 @@ using namespace std;
 #define sal(a) scanf("%I64d", &a)
 
 int main() {
-    map<int*, int> mp;
-    int a[10];
-    mp[a] = 10;
-    cout << mp[a] << endl;
+    return 0;
 }
