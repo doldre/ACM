@@ -1,3 +1,31 @@
+/************************************************
+ *Author        :mathon
+ *Email         :luoxinchen96@gmail.com
+*************************************************/
+#include <cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <set>
+#include <map>
+#include <string>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+#include <stack>
+using namespace std;
+typedef pair<int, int> pii;
+typedef long long ll;
+typedef unsigned long long ull;
+#define xx first
+#define lowbit(x) (x&-x)
+#define yy second
+#define sa(n) scanf("%d", &(n))
+#define pr(x) cout << #x << " " << x << " "
+#define prln(x) cout << #x << " " << x << endl
+
 const double eps = 1e-9;
 const int maxn = 1e5 + 5;
 
@@ -40,4 +68,13 @@ bool LineCross(Line a, Line b) {
            max(b.s.y, b.e.y) >= min(a.s.y, a.e.y) &&
            sign((a.s - b.s).det(b.e - b.s)) * sign((a.e - b.s).det(b.e - b.s)) <= 0 &&
            sign((b.s - a.s).det(a.e - a.s)) * sign((b.e - a.s).det(a.e - a.s)) <= 0;
+}
+
+int main(void)
+{
+#ifdef LOCAL
+    //freopen("in.txt", "r", stdin);
+    //freopen("out.txt", "w", stdout);
+#endif
+    return 0;
 }
