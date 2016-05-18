@@ -25,40 +25,37 @@ typedef unsigned long long ull;
 #define sa(n) scanf("%d", &(n))
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-const int inf = 0x3f3f3f3f;
-const int maxn = 50 + 5;
-const int maxh = 5e5 + 5;
-int h[maxn], dp[2][maxh];
+const int maxn = 100 + 5;
+const int maxk = 100000 + 5;
+int dp[maxk];
+int A[maxn], M[maxn];
+int n, k;
 int main(void)
 {
 #ifdef LOCAL
-    freopen("in.txt", "r", stdin);
+    //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
     int T;
     sa(T);
     while(T--) {
-        int n;
-        sa(n);
-        int tot = 0;
+        sa(n); sa(k);
         for (int i = 1; i <= n; i++) {
-            sa(h[i]);
-            tot += h[i];
+            sa(A[i]);
         }
-        int now = 1;
-        for (int i = 0; i < maxh; i++) dp[0][i] = dp[1][i] = -inf;
-        dp[0][0] = 0;
         for (int i = 1; i <= n; i++) {
-            memcpy(dp[now], dp[now^1], sizeof(dp[now]));
-            for (int j = 0; j <= tot; j++) {
-                if(j + h[i] <= tot) dp[now][j+h[i]] = max(dp[now][j+h[i]], dp[now^1][j] + h[i]);
-                dp[now][abs(j-h[i])] = max(dp[now][abs(j-h[i])], dp[now^1][j] + h[i]);
+            sa(M[i]);
+        }
+        memset(dp, -1, sizeof(dp));
+        dp[0] = 0;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= k; j++) {
+                if(dp[j] >= 0) dp[j] = M[i];
+                else if(j >= A[i] && dp[j-A[i]] > 0) dp[j] = dp[j-A[i]] - 1;
             }
-            now ^= 1;
         }
-        if(dp[now^1][0] <= 0) {
-            printf("GG\n");
-        } else printf("%d\n", dp[now^1][0] / 2);
+        if(dp[k] >= 0) printf("yes\n");
+        else printf("no\n");
     }
     return 0;
 }
