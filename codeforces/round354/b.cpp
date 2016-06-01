@@ -25,42 +25,36 @@ typedef unsigned long long ull;
 #define sa(n) scanf("%d", &(n))
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-int gcd(int a, int b) {
-    if(b == 0) return a;
-    else return gcd(b, a % b);
+const int maxn = 4096;
+const double eps = 1e-9;
+double A[maxn];
+int n;
+double t;
+void dfs(int deep, int num, double v) {
+    if(deep > n) return;
+    double det = min(v, 1 - A[num]);
+    v -= det;
+    A[num] += det;
+    if(v > eps) {
+        dfs(deep + 1, num + deep, v / 2);
+        dfs(deep + 1, num + deep + 1, v / 2);
+    }
 }
-
 int main(void)
 {
 #ifdef LOCAL
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    int T;
-    sa(T);
-    while(T--) {
-        int n;
-        sa(n);
-        int maxk = 0;
-        int g = 0;
-        bool has_zero = false;
-        for (int i = 1; i <= n; i++) {
-            int x;
-            sa(x);
-            if(x == 0) has_zero = true;
-            g = gcd(g, x);
-            maxk = max(x, maxk);
+    cin >> n >> t;
+    dfs(1, 1, t);
+    int ans = 0;
+    for (int i = 1; i < maxn; i++) {
+        /* prln(A[i]); */
+        if(abs(A[i] - 1) < eps) {
+            ans++;
         }
-        double res = maxk / g - n;
-        int t = maxk / g;
-        if(has_zero) {
-            res += 1;
-            t += 1;
-        }
-        for (int i = 1; i <= t; i++) {
-            res += (double)(t) / (double)(i);
-        }
-        printf("%.0f\n", floor(res));
     }
+    cout << ans << endl;
     return 0;
 }
