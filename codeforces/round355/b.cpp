@@ -1,7 +1,7 @@
 /************************************************
  *Author        :mathon
  *Email         :luoxinchen96@gmail.com
-*************************************************/
+ *************************************************/
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -22,31 +22,36 @@ typedef unsigned long long ull;
 #define xx first
 #define lowbit(x) (x&-x)
 #define yy second
+#define sa(n) scanf("%d", &(n))
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-
+const int maxn = 100000 + 5;
+int A[maxn];
 int main(void)
 {
 #ifdef LOCAL
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    int T;
-    scanf("%d", &T);
-    while(T--) {
-        set<int> s;
-        for (int i = 0; i < 26; i++) {
-            int x; scanf("%d", &x);
-            if(x != 0) s.insert(x);
-        }
-        if(s.size() == 0) printf("%d\n", 0);
-        else if(s.size() == 1) {
-            int t = *s.begin();
-            printf("%d\n", t * (t - 1) / 2);
-        } else {
-            int t = *s.begin();
-            printf("%d\n", t - 1);
+    int n, h, k;
+    cin >> n >> h >> k;
+    ll t = 0;
+    ll r = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> A[i];
+    }
+    for (int i = 0; i < n; i++) {
+        r += A[i];
+        if(r + A[i+1] > h) {
+            ll det = A[i+1] - (h - r);
+            ll ti = max(1ll, (det + k - 1) / k);
+            t += ti;
+            /* pr(i); */
+            /* prln(ti); */
+            r -= min(r, ti * k);
         }
     }
+    t += (r + k - 1) / k;
+    cout << t << endl;
     return 0;
 }

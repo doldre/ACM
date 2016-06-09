@@ -24,6 +24,22 @@ typedef unsigned long long ull;
 #define yy second
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
+const ll mod = 1e9 + 7;
+const int maxn = 100 + 5;
+
+ll mod_pow(ll x, ll n) {
+    ll res = 1;
+    while(n) {
+        if(n & 1) {
+            res = (res * x) % mod;
+        }
+        x = x * x % mod;
+        n >>= 1;
+    }
+    return res;
+}
+
+ll dp[maxn][2];
 
 int main(void)
 {
@@ -31,22 +47,14 @@ int main(void)
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    int T;
-    scanf("%d", &T);
-    while(T--) {
-        set<int> s;
-        for (int i = 0; i < 26; i++) {
-            int x; scanf("%d", &x);
-            if(x != 0) s.insert(x);
-        }
-        if(s.size() == 0) printf("%d\n", 0);
-        else if(s.size() == 1) {
-            int t = *s.begin();
-            printf("%d\n", t * (t - 1) / 2);
-        } else {
-            int t = *s.begin();
-            printf("%d\n", t - 1);
-        }
+    int n;
+    cin >> n;
+    dp[1][0] = dp[1][1] = 1;
+    for (int i = 2; i <= n; i++) {
+        dp[i][1] = dp[i-1][0];
+        dp[i][0] = (dp[i-1][0] + dp[i-1][1]) % mod;
     }
+    ll t = (dp[n][0] + dp[n][1]) % mod;
+    cout << (mod_pow(2, n) - t + mod) % mod << endl;
     return 0;
 }

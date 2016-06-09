@@ -22,6 +22,7 @@ typedef unsigned long long ull;
 #define xx first
 #define lowbit(x) (x&-x)
 #define yy second
+#define sa(n) scanf("%d", &(n))
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
 
@@ -31,22 +32,15 @@ int main(void)
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    int T;
-    scanf("%d", &T);
-    while(T--) {
-        set<int> s;
-        for (int i = 0; i < 26; i++) {
-            int x; scanf("%d", &x);
-            if(x != 0) s.insert(x);
-        }
-        if(s.size() == 0) printf("%d\n", 0);
-        else if(s.size() == 1) {
-            int t = *s.begin();
-            printf("%d\n", t * (t - 1) / 2);
-        } else {
-            int t = *s.begin();
-            printf("%d\n", t - 1);
-        }
+    int n, h;
+    cin >> n >> h;
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        if(x > h) ans += 2;
+        else ans += 1;
     }
+    cout << ans << endl;
     return 0;
 }
