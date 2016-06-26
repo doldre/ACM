@@ -24,29 +24,40 @@ typedef unsigned long long ull;
 #define yy second
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
+const int maxn = 3e5 + 7;
+int parent[maxn], size[maxn], centroid[maxn];
+vector<int> children[maxn];
+int n, q;
 
+void dfs(int u) {
+    size[u] = 1;
+    pii best {0, 0};
+    for (auto v: children[u]) {
+        dfs(v);
+        size[u] += size[v];
+        best = max(best, pii(size[v], v));
+    }
+    auto &ref = centroid[u] = best.xx ? centroid[best.yy] : u;
+    while (ref != u && size[u] - size[ref] >= size[ref]) {
+        ref = parent[ref];
+    }
+}
 int main(void)
 {
 #ifdef LOCAL
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    int T;
-    scanf("%d", &T);
-    while(T--) {
-        set<int> s;
-        for (int i = 0; i < 26; i++) {
-            int x; scanf("%d", &x);
-            if(x != 0) s.insert(x);
-        }
-        if(s.size() == 0) printf("%d\n", 0);
-        else if(s.size() == 1) {
-            int t = *s.begin();
-            printf("%d\n", t * (t - 1) / 2);
-        } else {
-            int t = *s.begin();
-            printf("%d\n", t - 1);
-        }
+    scanf("%d%d", &n, &q);
+    for (int i = 2; i <= n; i++) {
+        scanf("%d", parent + i);
+        children[parent[i]].push_back(i);
+    }
+    dfs(1);
+    for (int i = 0; i < q; i++) {
+        int x;
+        scanf("%d", &x);
+        printf("%d\n", centroid[x]);
     }
     return 0;
 }

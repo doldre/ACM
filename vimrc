@@ -1,5 +1,9 @@
 "<C-a> copy all to system register
 map <C-a> gg"+yG
+" 显示行号
+set nu
+" nerdTree快捷键
+map <C-e> :NERDTreeToggle<CR>
 "自动生成代码设置
 map <F2> :call LoadTemplate()<CR>
 func LoadTemplate()
@@ -11,10 +15,10 @@ map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
-		exec "!g++ % -o %< -O2 -Wall -DLOCAL -std=c++11"
+		exec "!g++ % -o %< -O2 -Wall -DMATHON -std=c++11"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %< -O2 -Wall -DLOCAL -std=c++11"
+		exec "!g++ % -o %< -O2 -Wall -DMATHON -std=c++11"
 		exec "!time ./%<"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
@@ -68,6 +72,7 @@ set mat=2
 " => Colors and Fonts
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Enable syntax highlighting
+let python_highlight_all=1
 syntax enable 
 
 try
@@ -79,6 +84,7 @@ set background=dark
 
 " Set extra options when running in GUI mode
 if has("gui_running")
+    colorscheme solarized
     set guioptions-=T
     set guioptions-=e
     set t_Co=256
@@ -117,4 +123,59 @@ map <C-j> <C-w>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+
+" Enable mouse
+set mouse=a
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+set backspace=indent,eol,start
+" Enable folding with the spacebar
+" nnoremap <space> za
+
+let g:NERDSpaceDelims=1
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Vundle Raletive 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-scripts/indentpython.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+"Plugin 'Raimondi/delimitMate'
+" The following are examples of different formats supported.
+" Keep Plugin commands between vundle#begin/end.
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"=> YouCompleteMe
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:ycm_python_binary_path = 'python3'
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 
