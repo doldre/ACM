@@ -30,9 +30,11 @@ int main(void) {
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    vector<int> vc;
-    string str;
-    cin >> str;
+    printf("Hello World\n");
+    int cnt = 0;
+    while(true) {
+        printf("%d", cnt++);
+    }
     return 0;
 }
 
