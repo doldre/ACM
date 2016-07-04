@@ -16,7 +16,6 @@
 #include <ctime>
 #include <stack>
 using namespace std;
-typedef pair<int, int> pii;
 typedef long long ll;
 typedef unsigned long long ull;
 #define xx first
@@ -24,15 +23,13 @@ typedef unsigned long long ull;
 #define yy second
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-
+const int maxn = 1e5 + 7;
+int A[maxn], B[maxn];
 int main(void) {
 #ifdef MATHON
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
-    vector<int> vc;
-    string str;
-    cin >> str;
     return 0;
 }
 
