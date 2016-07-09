@@ -15,11 +15,13 @@ using namespace std;
 #define prln(x) cout << #x << " = " << x << endl
 typedef pair<int, int> pii;
 typedef long long ll;
-
 int main() {
 #ifdef LOCAL
 	//freopen("in.txt", "r", stdin);
 	//freopen("out.txt", 'w', stdout);
 #endif
+    for (int i = 0; i < 10; i++) { 
+        vector<int> vc;
+    }
 	return 0;
 }
