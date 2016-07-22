@@ -24,20 +24,18 @@ typedef unsigned long long ull;
 #define yy second
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-
+#define lson l, m, rt<<1
+#define rson m+1, r, rt<<1|1 
 const int maxn = 1e5 + 5;
 int A[maxn];
 int N;
 
-int gcd(int a, int b) {
-    return b == 0 ? a : gcd(b, a % b);
-}
 
 struct SegT {
     int a[maxn<<2];
 
     void push_up(int rt) {
-        a[rt] = gcd(a[rt<<1], a[rt<<1|1]);
+        a[rt] = __gcd(a[rt<<1], a[rt<<1|1]);
         // pr(rt);
         // prln(a[rt]);
     }
@@ -53,8 +51,8 @@ struct SegT {
             return;
         }
         int m = (l + r) >> 1;
-        if(l <= m) build(l, m, rt << 1);
-        if(m < r) build(m + 1, r, rt << 1 | 1);
+        build(lson);
+        build(rson);
         push_up(rt);
     }
 
@@ -64,8 +62,8 @@ struct SegT {
         }
         int m = (l + r) >> 1;
         int res = 0;
-        if(L <= m) res = gcd(res, querry(L, R, l, m, rt << 1));
-        if(m < R) res = gcd(res, querry(L, R, m + 1, r, rt << 1 | 1));
+        if(L <= m) res = __gcd(res, querry(L, R, lson));
+        if(m < R) res = __gcd(res, querry(L, R, rson));
         return res;
     }
 }seg;
@@ -79,8 +77,6 @@ int main(void) {
     int T;
     scanf("%d", &T);
     for (int Cas = 1; Cas <= T; Cas++) {
-        map<int, long long> m;
-        int q, j, pre;
         scanf("%d", &N);
         for (int i = 0; i < N; i++) {
             scanf("%d", &A[i]);
@@ -88,23 +84,28 @@ int main(void) {
         }
         seg.init();
         seg.build(1, N, 1);
-        for (int i = N - 1; i >= 0; i--) {
-            pre = i;
-            for (j = i; j < N; j = nxt[j]) {
-                A[j] = gcd(A[j], A[pre]);
-                if(A[j] == A[pre]) nxt[pre] = nxt[j];
-                m[A[j]] += (nxt[j] - j);
-                pre = j;
+        map<int, int> cur, tmp;
+        map<int, ll> ans;
+        for (int i = 0; i < N; i++) {
+            int a = A[i];
+            cur[a]++;
+            tmp.clear();
+            map<int, int>::iterator it;
+            for (it = cur.begin(); it != cur.end(); it++) {
+                tmp[__gcd(it->xx, a)] += it->second;
+                ans[__gcd(it->xx, a)] += it->second;
             }
+            cur = tmp;
         }
+        int q; 
         scanf("%d", &q);
         printf("Case #%d:\n", Cas);
         for (int i = 0; i < q; i++) {
             int l, r;
             scanf("%d%d", &l, &r);
             int a = seg.querry(l, r, 1, N, 1);
-            int b = m[a];
-            printf("%d %d\n", a, b);
+            ll b = ans[a];
+            printf("%d %lld\n", a, b);
         }
     }
     return 0;
