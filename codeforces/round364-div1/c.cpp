@@ -1,144 +1,142 @@
-/************************************************
- *Author        :mathon
- *Email         :luoxinchen96@gmail.com
-*************************************************/
 #include <cstdio>
-#include <cstring>
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
 #include <vector>
-#include <queue>
-#include <set>
-#include <map>
 #include <string>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <stack>
+#include <cstring>
+#define prln(x) cout << #x << " = " << x << endl
+#define pr(x) cout << #x << " = " << x << " "
 using namespace std;
-typedef pair<int, int> pii;
-typedef long long ll;
-typedef unsigned long long ull;
-#define xx first
-#define lowbit(x) (x&-x)
-#define yy second
-#define pr(x) cout << #x << " " << x << " "
-#define prln(x) cout << #x << " " << x << endl
+const int INF = 0x7fffffff;
+const int MAXN = 1000 + 5;
+const int MAXM = 3e4 + 5;
+struct Edge{
+    int nxt, cost, id, to;
+    bool used, cut;
+}edge[MAXM << 1];
 
-const int inf = 0x3f3f3f3f;
-const int maxn = 1000 + 5;
-const int maxv = 1000 + 5;
-int d[maxn][maxn];
+int head[MAXN], tot;
+int visd[MAXN];
 
-struct Dinic {
-    struct edge {
-        int to, cap, rev, num; 
-        edge() {}
-        edge(int to, int cap, int rev):to(to), cap(cap), rev(rev) {}
-        edge(int to, int cap, int rev, int num):to(to), cap(cap),
-        rev(rev), num(num) {}
-    };
-    
-    vector<edge> G[maxv];
-    int num_v;
-    int level[maxv];
-    int iter[maxv];
+void init() {
+    tot = 0;
+    memset(head, -1, sizeof(head));
+}
 
-    void add_edge(int from, int to, int cap, int num) {
-        G[from].push_back(edge(to, cap, (int)G[to].size(), num));
-        G[to].push_back(edge(from, 0, (int)G[from].size() - 1, num));
-    }
-   
-    void init(int num_v) {
-        this->num_v = num_v;
-        for (int i = 0; i <= num_v; i++) G[i].clear();
-    }
-    
-    void bfs(int s) {
-        memset(level, -1, sizeof(level));
-        queue<int> que;
-        level[s] = 0;
-        que.push(s);
-        while(!que.empty()) {
-            int v = que.front(); que.pop();
-            for (int i = 0; i < (int)G[v].size(); i++) {
-                edge &e = G[v][i];
-                if (e.cap > 0 && level[e.to] < 0) {
-                    level[e.to] = level[v] + 1;
-                    que.push(e.to);
-                }
-            }
+void add_edge(int u, int v, int cost, int id) {
+    edge[tot].to = v;
+    edge[tot].nxt = head[u];
+    edge[tot].cost = cost;
+    edge[tot].id = id;
+    edge[tot].used = false;
+    edge[tot].cut = false;
+    head[u] = tot++;
+}
+
+bool get_path(int u, int &dest, vector<int> &path) {
+    if(u == dest) return true;
+    visd[u] = true;
+    for (int i = head[u]; ~i; i = edge[i].nxt) {
+        int v = edge[i].to;
+        if(visd[v] || edge[i].used) continue;
+        if(get_path(v, dest, path)) {
+            path.push_back(i);
+            return true;
         }
     }
+    return false;
+}
 
-    int dfs(int v, int t, int f) {
-        if (v == t) return f;
-        for (int &i = iter[v]; i < (int)G[v].size(); i++) {
-            edge &e = G[v][i];
-            if (e.cap > 0 && level[v] < level[e.to]) {
-                int d = dfs(e.to, t, min(f, e.cap));
-                if( d > 0) {
-                    e.cap -= d;
-                    G[e.to][e.rev].cap += d;
-                    return d;
-                }
-            }
-        }
-        return 0;
-    }
+int DFN[MAXN], Low[MAXN], dfsNum;
 
-    int max_flow(int s, int t) {
-        int flow = 0;
-        for (;;) {
-            bfs(s);
-            if(level[t] < 0) return flow;
-            memset(iter, 0, sizeof(iter));
-            int f;
-            while((f = dfs(s, t, inf)) > 0) {
-                flow += f;
+void Tarjan(int u, int pre) {
+    DFN[u] = Low[u] = ++dfsNum;
+    for (int i = head[u]; ~i; i = edge[i].nxt) {
+        if(edge[i].used || (i ^ pre) == 1) continue;
+        int v = edge[i].to;
+        if(DFN[v] == -1) {
+            Tarjan(v, i);
+            Low[u] = min(Low[u], Low[v]);
+            if(Low[v] > DFN[u]) {
+                edge[i].cut = true;
+                edge[i^1].cut = true;
             }
+        } else {
+            Low[u] = min(Low[u], DFN[v]);
         }
     }
-}dinic;
-const int maxm = 3e4 + 5;
-int n, m;
-int s, t;
-int weight[maxm];
+}
+
+
 int main() {
+    int n, m, s, t;
     scanf("%d%d", &n, &m);
     scanf("%d%d", &s, &t);
+    init();
     for (int i = 1; i <= m; i++) {
         int x, y, w;
         scanf("%d%d%d", &x, &y, &w);
-        weight[i] = w;
-        dinic.add_edge(x, y, 1, i);
-        dinic.add_edge(y, x, 1, i);
+        if(x == y) continue;
+        add_edge(x, y, w, i);
+        add_edge(y, x, w, i);
     }
-    int S = n + 1, T = n + 2;
-    dinic.add_edge(S, s, inf, -1);
-    dinic.add_edge(t, T, inf, -1);
-    int flow = dinic.max_flow(S, T);
-    if(flow > 2) {
-        puts("-1");
-    } else {
-        vector<pii> ans;
-        for (int i = 1; i <= n; i++) {
-            for (auto &e: dinic.G[i]) {
-                if(e.cap == 0) {
-                    ans.push_back(pii(weight[e.num], e.num));
+    memset(visd, 0, sizeof(visd));
+    vector<int> path;
+    if(!get_path(s, t, path)) {
+        printf("0\n0\n");
+        return 0;
+    }
+    // puts("path");
+    // for (auto i: path) printf("%d ", edge[i].id);
+    // puts("path");
+    int res = INF; 
+    vector<int> cut, tmp;
+    vector<int> spath;
+    for (int i = 0; i < (int)path.size(); i++) {
+        tmp.clear();
+        tmp.push_back(edge[path[i]].id);
+        edge[path[i]].used = edge[path[i]^1].used = true;
+        memset(DFN, -1, sizeof(DFN));
+        memset(visd, 0, sizeof(visd));
+        dfsNum = 0;
+        Tarjan(s, -1);
+        spath.clear();
+        memset(visd, 0, sizeof(visd));
+        if(!get_path(s, t, spath)) {
+            // prln("ok");
+            // prln(edge[path[i]].id);
+            if(res > edge[path[i]].cost) {
+                res = edge[path[i]].cost;
+                cut = tmp;
+            }
+        } else {
+            int sed = -1;
+            for (int j = 0; j < (int)spath.size(); j++) {
+                if(edge[spath[j]].cut && 
+                        (sed == -1 || edge[spath[j]].cost < edge[sed].cost)) {
+                    sed = spath[j];
+                }
+            }
+            if(sed >= 0) {
+                tmp.push_back(edge[sed].id);
+                if(res > edge[path[i]].cost + edge[sed].cost) {
+                    res = edge[path[i]].cost + edge[sed].cost;
+                    cut = tmp;
                 }
             }
         }
-        sort(ans.begin(), ans.end());
-        int res = 0;
-        for (int i = 0; i < flow; i++) {
-            res += ans[i].xx;
-        }
-        printf("%d\n", res);
-        printf("%d\n", flow);
-        for (int i = 0; i < flow; i++) {
-            printf("%d ", ans[i].yy);
+        edge[path[i]].used = edge[path[i]^1].used = false;
+        for (int j = 0; j < tot; j++) edge[j].cut = false;
+    }
+    if(res == INF) {
+        printf("-1\n");
+    } else {
+        printf("%d\n%d\n", res, (int)cut.size());
+        for (auto i: cut) {
+            printf("%d ", i);
         }
     }
     return 0;
 }
+
