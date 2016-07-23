@@ -8,7 +8,7 @@ typedef long long ll;
 using namespace std;
 const int mod = 1e9 + 7;
 const int maxn = (1<<16) + 100;
-const int maxm = (1<<8) + 100;
+const int maxm = (1<<8);
 const int inf = 0x3f3f3f3f;
 const ll inff = 0x3f3f3f3f3f3fLL;
 ll ds[maxm][maxm];
