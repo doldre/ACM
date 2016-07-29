@@ -24,11 +24,12 @@ typedef unsigned long long ull;
 #define yy second
 #define pr(x) cout << #x << " " << x << " "
 #define prln(x) cout << #x << " " << x << endl
-const int maxn = 20 + 5;
+const double eps = 1e-9;
+const int maxn = 20;
 double P[maxn];
-double not_cache[maxn];
-int n, k;
-int A[maxn], cnt;
+int n, k, m;
+double dp[1<<maxn];
+double ans[maxn];
 int main(void) {
 #ifdef MATHON
     //freopen("in.txt", "r", stdin);
@@ -36,25 +37,41 @@ int main(void) {
 #endif
     scanf("%d%d", &n, &k);
     for (int i = 0; i < n; i++) {
-        scanf("%lf", &P[i]);
+        scanf("%lf", P + i);
+        if(P[i] > eps) m++;
     }
+    m = min(m, k);
+    dp[0] = 1;
     for (int mask = 0; mask < (1<<n); mask++) {
-        if(__builtin_popcount(mask) == k) {
-            int cnt = 0;
-            for (int i = 0; i < n; i++) {
-                if((mask >> i) & 1) {
-                    A[cnt++] = i;
+        double rest = 0;
+        int cnt = 0;
+        for (int i = 0; i < n; i++) {
+            if((mask >> i) & 1) {
+                cnt++;
+            } else {
+                rest += P[i];
+            }
+        }
+        if(cnt >= m) {
+            if(cnt > m) {
+                dp[mask] = 0;
+            } else {
+                for (int i = 0; i < n; i++) {
+                    if((mask >> i) & 1) {
+                        ans[i] += dp[mask];
+                    }
                 }
             }
-            double base = 1 / ((double)pow(2.0, k) * k);
-            for (int i = 0; i < k; i++) {
-                int a = A[i];
-                not_cache[a] += base * P[a];
+        }
+
+        for (int i = 0; i < n; i++) {
+            if(!((mask >> i) & 1)) {
+                dp[mask | (1 << i)] += dp[mask] * P[i] / rest;
             }
         }
     }
     for (int i = 0; i < n; i++) {
-        printf("%.9f ", 1 - not_cache[i]);
+        printf("%.9f ", ans[i]);
     }
     return 0;
 }

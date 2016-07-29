@@ -87,9 +87,6 @@ int main() {
         printf("0\n0\n");
         return 0;
     }
-    // puts("path");
-    // for (auto i: path) printf("%d ", edge[i].id);
-    // puts("path");
     int res = INF; 
     vector<int> cut, tmp;
     vector<int> spath;
@@ -104,8 +101,6 @@ int main() {
         spath.clear();
         memset(visd, 0, sizeof(visd));
         if(!get_path(s, t, spath)) {
-            // prln("ok");
-            // prln(edge[path[i]].id);
             if(res > edge[path[i]].cost) {
                 res = edge[path[i]].cost;
                 cut = tmp;
