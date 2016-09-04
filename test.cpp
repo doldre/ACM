@@ -1,3 +1,4 @@
+#include <iostream>
 #include<cstdio>
 #include<cstring>
 #include<algorithm>
@@ -14,7 +15,10 @@ struct SuffixArray {
     int n; // 字符个数
     
     void clear() { n = 0; memset(sa, 0, sizeof(sa)); }
-    
+   
+    void add(int ch) {
+        s[n++] = ch;
+    }
     // m为最大字符值加1。调用之前需设置好s和n
     void build_sa(int m) {
         int i, *x = t, *y = t2;
@@ -49,4 +53,29 @@ struct SuffixArray {
             height[rank[i]] = k;
         }
     }
+    
+    void show() {
+        for (int i = 0; i < n; i++) {
+            printf("i = %d, s[i] = %d, rank[i] = %d, sa[i] = %d, height[i] = %d\n",
+                    i, s[i], rank[i], sa[i], height[i]);
+        }
+        puts("");
+    }
 };
+
+SuffixArray sa;
+char str[maxn];
+int main() {
+    while(cin >> str) {
+        sa.clear();
+        int sz = strlen(str);
+        for (int i = 0; i < sz; i++) {
+            sa.add(str[i] - 'a' + 1);
+        }
+        sa.add(0);
+        sa.build_sa(27);
+        sa.build_height();
+        sa.show();
+    }
+};
+
