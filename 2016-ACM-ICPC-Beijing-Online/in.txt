@@ -1,0 +1,22 @@
+5 5 4 12
+1 9 1 4 4
+1 9 1 2 4
+1 9 1 1 2
+2 9 2 7 3
+2 3 2 6 1
+10 5 8 1 3 1 1 0
+20 10 5 1 2 2 1 0
+19 10 5 1 2 5 2 1
+25 25 3 1 1 5 5 0
+Round of 0
+Action of character 2
+Move to (5,1)
+Attack 3
+Action of character 1
+Move to (3,1)
+Round of 1
+Action of character 3
+Drive out 1
+Round of 0
+Action of character 2
+Drive out 3

@@ -2,6 +2,7 @@
 map <C-a> gg"+yG
 " 显示行号
 set nu
+set cursorline
 " nerdTree快捷键
 map <C-e> :NERDTreeToggle<CR>
 "自动生成代码设置
@@ -15,10 +16,10 @@ map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
 	exec "w"
 	if &filetype == 'c'
-		exec "!g++ % -o %< -O2 -Wall -DMATHON -std=c++11"
+		exec "!g++ % -g -o %< -O2 -Wall -DMATHON -std=c++11"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %< -O2 -Wall -DMATHON -std=c++11"
+		exec "!g++ % -g -o %< -O2 -Wall -DMATHON -std=c++11"
 		exec "!time ./%<"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
@@ -26,7 +27,7 @@ func! CompileRunGcc()
 	elseif &filetype == 'sh'
 		:!time bash %
 	elseif &filetype == 'python'
-		exec "!time python3 %"
+		exec "!time python %"
     elseif &filetype == 'html'
         exec "!firefox % &"
     elseif &filetype == 'go'
@@ -41,8 +42,8 @@ endfunc
 map <F8> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
-	exec "!g++ % -g -o %<"
-	exec "!gdb ./%<"
+	exec "!g++ % -o %< -O2 -Wall -DMATHON -g -std=c++11"
+	exec "!lldb %<"
 endfunc
 
 "Sets how many lines of history VIM has to remember
@@ -85,6 +86,9 @@ set background=dark
 " Set extra options when running in GUI mode
 if has("gui_running")
     colorscheme solarized
+    set term=linux
+    " set backspace=2
+    set guifont=Source_Code_Pro_Light:h14
     set guioptions-=T
     set guioptions-=e
     set t_Co=256
@@ -136,9 +140,9 @@ set backspace=indent,eol,start
 
 "记住最后一次编辑的位置
 autocmd BufReadPost *
-  \ if line("'\"") > 1 && line("'\"") <= line("$") |
-  \   exe "normal! g`\"" |
-  \ endif
+            \ if line("'\"") > 1 && line("'\"") <= line("$") |
+            \   exe "normal! g`\"" |
+            \ endif
 
 let g:NERDSpaceDelims=1
 
@@ -159,9 +163,10 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'scrooloose/nerdtree'
+Plugin 'artur-shaik/vim-javacomplete2'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'SirVer/ultisnips'
-"Plugin 'Raimondi/delimitMate'
+"Plugin 'Raimondi/delimitMte'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 
@@ -200,7 +205,7 @@ let g:ycm_collect_identifiers_from_comments_and_strings = 0
 
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR> " 跳转到定义处
 
-let g:ycm_python_binary_path = 'python3'
+let g:ycm_python_binary_path = 'python'
 let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 

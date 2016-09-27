@@ -7,6 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <cassert>
 #include <queue>
 #include <set>
 #include <map>
@@ -111,41 +112,70 @@ int solve_xor() {
     return ans;
 }
 
-int solve_or() {
-    Node *root2 = newNode();
-    cpy_tree(root2, root);
-    Node *p1 = root, *p2 = root2;
-    int ans = 0;
-    for (int i = 20; i >= 0; i--) {
-        if(p1->ch[1] != NULL) {
-            ans |= 1 << i;
-            p1 = p1->ch[1];
-            int t0 = p2->ch[0] == NULL ? 0 : p2->ch[0]->s;
-            int t1 = p2->ch[1] == NULL ? 0 : p2->ch[1]->s;
-            if(t0 < t1) {
-                merge_tree(p2->ch[1], p2->ch[0]);
-                p2 = p2->ch[1];
+void dfs(Node *rt) {
+    if(rt == NULL) return;
+    merge_tree(rt->ch[0], rt->ch[1]);
+    dfs(rt->ch[0]);
+    dfs(rt->ch[1]);
+}
+
+int solve_or_2() {
+    dfs(root);
+    int res = 0;
+    for (int k = 1; k <= n; k++) {
+        int x = A[k];
+        int ans = 0;
+        Node *p = root;
+        for (int i = 20; i >= 0; i--) {
+            int t = (x>>i) & 1;
+            if(t) {
+                ans |= 1<<i;
+                p = p->ch[0];
             } else {
-                merge_tree(p2->ch[0], p2->ch[1]);
-                p2 = p2->ch[0];
-            }
-        } else {
-            p1 = p1->ch[0];
-            if(p2->ch[1] != NULL) {
-                ans |= 1 << i;
-                p2 = p2->ch[1];
-            } else {
-                p2 = p2->ch[0];
+                if(p->ch[1] != NULL) {
+                    ans |= 1<<i;
+                    p = p->ch[1];
+                } else {
+                    p = p->ch[0];
+                }
             }
         }
+        res = max(res, ans);
     }
-    // destroy(root2);
+    return res;
+}
+
+int brut(int op) {
+    int ans = 0;
+    for (int i = 1; i <= n; i++) {
+        for (int j = i + 1; j <= n; j++) {
+            int t;
+            if(op == 1) {
+                t = A[i] & A[j];
+            } else if(op == 2) {
+                t = A[i] ^ A[j];
+            } else if(op == 3) {
+                t = A[i] | A[j];
+            }
+            ans = max(ans, t);
+        }
+    }
     return ans;
+}
+
+void print_bin(int x) {
+    string str;
+    while(x > 0) {
+        str.push_back(x % 2 + '0');
+        x /= 2;
+    }
+    reverse(str.begin(), str.end());
+    cout << str;
 }
 
 int main(void) {
 #ifdef MATHON
-    //freopen("in.txt", "r", stdin);
+    freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
 #endif
     int T; scanf("%d", &T);
@@ -164,7 +194,7 @@ int main(void) {
         } else if(type == 2) {
             ans = solve_xor();
         } else if(type == 3) {
-            ans = solve_or();
+            ans = solve_or_2();
         }
         // destroy(root);
         printf("Case #%d: %d\n", Cas, ans);

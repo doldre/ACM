@@ -53,9 +53,6 @@ int main(void) {
                     tmp = abs(sum[r].xx - sum[l].xx - t);
                     ans = sum[r].xx - sum[l].xx;
                     ansl = sum[l].yy, ansr = sum[r].yy;
-                    // prln(ans);
-                    // pr(ansl); prln(ansr);
-                    // pr(sum[l].xx); prln(sum[r].xx);
                 }
                 while(l < r && sum[r].xx - sum[l].xx >= t) {
                     l++;
@@ -66,7 +63,6 @@ int main(void) {
                     }
                 }
             }
-            // prln(tmp);
             if(ansl > ansr) swap(ansl, ansr);
             printf("%d %d %d\n", ans, ansl + 1, ansr);
         }

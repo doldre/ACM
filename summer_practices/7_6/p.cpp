@@ -30,7 +30,7 @@ int main(void) {
 #ifdef MATHON
     //freopen("in.txt", "r", stdin);
     //freopen("out.txt", "w", stdout);
-#endif
+#endi
     int N, L;
 
     return 0;
