@@ -1,4 +1,4 @@
-void get_next(char x[], int m, int next[]) {
+void get_next(char x[], int m, int next[]) { //已验证
     int i, j;
     j = next[0] = -1;
     i = 0;
@@ -9,7 +9,7 @@ void get_next(char x[], int m, int next[]) {
 }
 
 /* 优化版本 */
-void get_next_o(char x[], int m, int kmpNext[]) {
+void get_next_o(char x[], int m, int kmpNext[]) { //已验证，注意最后一个字符一定要是终止符
     int i, j;
     j = kmpNext[0] = -1;
     i = 0;

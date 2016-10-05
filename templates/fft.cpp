@@ -81,6 +81,7 @@ const int MAXN = 200010;
 complex x1[MAXN],x2[MAXN];
 char str1[MAXN/2],str2[MAXN/2];
 int sum[MAXN];
+
 int main()
 {
     while(scanf("%s%s",str1,str2)==2)
