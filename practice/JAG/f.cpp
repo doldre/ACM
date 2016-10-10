@@ -1,86 +1,79 @@
-/************************************************
- *Author        :mathon
- *Email         :luoxinchen96@gmail.com
-*************************************************/
 #include <cstdio>
-#include <cstring>
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <queue>
-#include <set>
-#include <map>
-#include <string>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <stack>
 using namespace std;
-typedef pair<int, int> pii;
+#define pr(x) cout << #x << " = " << x << " "
+#define prln(x) cout << #x << " = " << x << endl
 typedef long long ll;
-typedef unsigned long long ull;
-#define xx first
-#define yy second
-#define pr(x) cout << #x << " " << x << " "
-#define prln(x) cout << #x << " " << x << endl
-template<class T> inline T lowbit(T x) { return x & (-x); }
-
 const int MAXN = 1e5 + 5;
+const int INF = 0x3f3f3f3f;
 struct Node {
-    int A, B, id;
-    Node() {}
-    Node(int A, int B):A(A), B(B) {};
-    bool operator < (const Node &b) const {
-        if(A - B != b.A - b.B) {
-            return A - B > b.A - b.B;
-        } else return A < b.A;
+    int a, b, d;
+    Node () {}
+    Node (int a, int b):a(a), b(b) {
+        d = a - b;
     }
 }nds[MAXN];
 
-class Cmp {
-    public:
-        bool operator () (const Node &a, const Node &b) {
-            if(a.A != b.A) return a.A < b.A;
-            else return a.id < b.id;
-        }
-};
-
-
-int N, L;
-int A[MAXN], B[MAXN], C[MAXN];
-
-int main(void) {
-#ifdef MATHON
-    freopen("in.txt", "r", stdin);
-    //freopen("out.txt", "w", stdout);
-#endif
-    scanf("%d%d", &N, &L);
-    multiset<Node, Cmp> st;
-    for (int i = 1; i <= N; i++) {
-        scanf("%d%d", &A[i], &B[i]);
-        nds[i] = Node(A[i], B[i]);
-        nds[i].id = i;
-        st.insert(nds[i]);
-    }
-    sort(nds + 1, nds + N + 1);
-    for (int i = 1; i <= N; i++) {
-        scanf("%d", &C[i]);
-    }
-    int cur = 0, op = 0;
-    for (int i = 1; i <= N; i++) {
-        if(st.lower_bound(Node(L-cur, 0)) != st.end()) {
-            printf("%d\n", i);
-            return 0;
-        } else {
-            cur += nds[i].A - nds[i].B;
-            st.erase(nds[i]);
-            op += C[i];
-            if(cur <= op) {
-                puts("-1"); return 0;
-            } 
-        }
-    }
-    puts("-1");
-    return 0;
+bool cmp(const Node &a, const Node &b) {
+    return a.d > b.d;
 }
 
+int C[MAXN];
+ll SD[MAXN], SC[MAXN];
+int catch_day[MAXN];
+int N, L;
+
+int solve(int i) {
+    int l = 0, r = N + 1;
+    while(l < r - 1) {
+        int m = (l + r) >> 1;
+        ll x = SD[m-1];
+        if(m >= i) {
+            x = SD[m] - nds[i].d;
+        }
+        if(x >= L - nds[i].a) {
+            r = m;
+        } else l = m;
+    }
+    if(catch_day[i] < r || r > N) return INF;
+    else return r;
+}
+
+int main() {
+#ifdef MATHON
+    freopen("in.txt", "r", stdin);
+#endif
+    scanf("%d%d", &N, &L);
+    for (int i = 1; i <= N; i++) {
+        int a, b; scanf("%d%d", &a, &b);
+        nds[i] = Node(a, b);
+    }
+    for (int i = 1; i <= N; i++) {
+        scanf("%d", &C[i]);
+        SC[i] = SC[i-1] + C[i];
+    }
+    sort(nds + 1, nds + N + 1, cmp);
+    for (int i = 1; i <= N + 1; i++) {
+        SD[i] = SD[i-1] + nds[i].d;
+    }
+    int last = 1;
+    for (int i = 1; i <= N; i++) {
+        for (; last <= N; last++) {
+            ll x = SD[last];
+            if(last >= i) {
+                x = SD[last+1] - nds[i].d;
+            }
+            if(x <= SC[last]) break;
+        }
+        catch_day[i] = last;
+        // pr(i); prln(catch_day[i]);
+    }
+    int ans = INF;
+    for (int i = 1;  i <= N; i++) {
+        // pr(i); prln(solve(i));
+        ans = min(ans, solve(i));
+    }
+    if(ans == INF) ans = -1;
+    printf("%d\n", ans);
+}
