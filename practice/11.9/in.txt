@@ -1,0 +1,11 @@
+2
+1 1 1
+alice
+bob
+alice bob
+5 5 5
+adam bob joe jill peter rob peter nicole eve saul harry ron
+eve adam
+joe chris
+jill jack
+jack saul

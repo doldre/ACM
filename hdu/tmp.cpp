@@ -9,5 +9,6 @@ using namespace std;
 #define sal(a) scanf("%I64d", &a)
 
 int main() {
+    cout << sizeof(size_t) << endl;
     return 0;
 }

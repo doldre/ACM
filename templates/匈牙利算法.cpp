@@ -98,17 +98,6 @@ int main()
                 }
             }
         }
-        /* for (int i = 1; i < maxv; i++) { */
-        /*     if(flag[i]) { */
-        /*         for (int j = 0; j < (int)prime.size() && prime[j] * i < maxv; j++) { */
-        /*             if(flag[j]) { */
-        /*                 cout << "debug" << j << endl; */
-        /*                 add(i, j); */
-        /*                 add(j, i); */
-        /*             } */
-        /*         } */
-        /*     } */
-        /* } */
         printf("%d\n",n - (match()>>1));
     }
     return 0;

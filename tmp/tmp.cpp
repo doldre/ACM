@@ -1,103 +1,82 @@
-/************************************************
- *Author        :mathon
- *Email         :luoxinchen96@gmail.com
-*************************************************/
+#include <map>
+#include <set>
+#include <stack>
+#include <queue>
+#include <cmath>
+#include <string>
+#include <vector>
 #include <cstdio>
+#include <cctype>
 #include <cstring>
+#include <sstream>
+#include <cstdlib>
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <queue>
-#include <set>
-#include <map>
-#include <string>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <stack>
+
 using namespace std;
-typedef pair<int, int> pii;
-typedef long long ll;
-typedef unsigned long long ull;
-#define xx first
-#define yy second
-#define pr(x) cout << #x << " " << x << " "
-#define prln(x) cout << #x << " " << x << endl
-template<class T> inline T lowbit(T x) { return x & (-x); }
+#define   MAX           100005
+#define   MAXN          1000005
+#define   maxnode       105
+#define   sigma_size    30
+#define   lson          l,m,rt<<1
+#define   rson          m+1,r,rt<<1|1
+#define   lrt           rt<<1
+#define   rrt           rt<<1|1
+#define   middle        int m=(r+l)>>1
+#define   LL            long long
+#define   ull           unsigned long long
+#define   mem(x,v)      memset(x,v,sizeof(x))
+#define   lowbit(x)     (x&-x)
+#define   pii           pair<int,int>
+#define   bits(a)       __builtin_popcount(a)
+#define   mk            make_pair
+#define   limit         10000
 
-int get_root2(ll a){
-	ll b = sqrt(a);
-	while((b + 1LL)*(b + 1LL)<=a) {
-        ++b;
+//const int    prime = 999983;
+const int    INF   = 0x3f3f3f3f;
+const LL     INFF  = 0x3f3f;
+const double pi    = acos(-1.0);
+const double inf   = 1e18;
+const double eps   = 1e-8;
+const LL     mod   = 1e9+7;
+const ull    mx    = 133333331;
+
+/*****************************************************/
+inline void RI(int &x) {
+      char c;
+      while((c=getchar())<'0' || c>'9');
+      x=c-'0';
+      while((c=getchar())>='0' && c<='9') x=(x<<3)+(x<<1)+c-'0';
+ }
+/*****************************************************/
+
+int sum[MAX];
+LL dp[MAX];
+map<int ,int> ma;
+int main(){
+    int n;
+    cin>>n;
+    sum[0]=0;
+    ma.clear();
+    for(int i=1;i<=n;i++){
+        int a;
+        scanf("%d",&a);
+        sum[i]=sum[i-1]+a;
     }
-	return b;
-}
-
-int get_root3(ll a){
-	ll b = cbrt(a);
-	while((b+1LL)*(b+1LL)*(b+1LL)<=a) ++b;
-	return b;
-}
-
-vector<int> primes;
-vector<int> d;
-
-void getPrimes(int n){
-	d.assign(n+1, 0);
-	primes.clear();
-	for(int i=2;i<=n;++i){
-		if(!d[i]) primes.push_back(d[i]=i);
-		for(int p : primes){
-			if(p>d[i] || 1LL*p*i>n) break;
-			d[p*i] = p;
-		}
-	}
-}
-
-ll cnt = 0;
-
-ll f(ll,int);
-ll pi(ll);
-
-vector<vector<int>> dp;
-
-ll f(ll n, int m){
-	if(m==0) return n;
-	if(m<(int)dp.size() && n<(int)dp[m].size()) return dp[m][(int)n];
-	if(n<1LL*primes[m]*primes[m]) return pi(n)-m+1;
-	return f(n, m-1) - f(n/primes[m-1], m-1);
-}
-
-ll pi(ll n){
-	if(n<=primes.back()) return upper_bound(primes.begin(), primes.end(), (int)n) - primes.begin();
-	int y = get_root3(n-1)+1, d = pi(y);
-	ll res = f(n,d) + d - 1;
-	for(int i = d; ; ++i){
-		ll p = primes[i];
-		if(p*p>n) break;
-		res-=pi(n/p) - pi(p) + 1;
-	}
-	return res;
-}
-
-void init(ll n){
-	getPrimes(get_root2(n+1)*2);
-	int sn = 1<<17, sm = min((int)primes.size(), 1<<6);
-	dp.assign(sm, vector<int>(sn));
-	for(int j=0;j<sm;++j)
-	for(int i=0;i<sn;++i){
-		if(j == 0) dp[j][i] = i; else
-		dp[j][i] = dp[j-1][i] - dp[j-1][i/primes[j-1]];
-	}
-}
-
-int main(void) {
-#ifdef MATHON
-    //freopen("in.txt", "r", stdin);
-    //freopen("out.txt", "w", stdout);
-#endif
-    init(592859377LL);
-    cout << pi(492859377LL) << endl;
+    dp[0]=1;
+    ma[0]=1;
+    LL all=1;
+    for(int i=1;i<=n;i++){
+        if(!ma.count(sum[i])){
+            dp[i]=all;
+            ma[sum[i]]=dp[i];
+        }
+        else{
+            dp[i]=((all-ma[sum[i]])%mod+mod)%mod;
+            ma[sum[i]]=(ma[sum[i]]+dp[i])%mod;
+        }
+        all=(all+dp[i])%mod;
+    }
+    cout<<dp[n]<<endl;
     return 0;
 }
-
